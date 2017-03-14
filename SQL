@@ -1,0 +1,100 @@
+ALTER proc [dbo].[RSVP_Insert]
+
+			
+            @Attending bit
+		   ,@NumberofGuests int = null 
+           ,@Guest1 nvarchar(128)
+           ,@Dish1 int = null
+           ,@Guest2 nvarchar(128)= null
+           ,@Dish2 int= null
+           ,@Guest3 nvarchar(128)= null
+           ,@Dish3 int= null
+           ,@Guest4 nvarchar(128)= null
+           ,@Dish4 int= null
+		   ,@Email nvarchar(128) = null
+		   ,@Id int output
+
+
+
+
+/*---TEST Code------
+
+
+Declare @Id int = '0';
+
+Declare    
+			
+		    @Attending bit = '1'
+		   ,@NumberofGuests int = 2
+           ,@Guest1 nvarchar(128) = 'Don Le'
+           ,@Dish1 int = '1'
+           ,@Guest2 nvarchar(128) = 'Antoinette Nguyen'
+           ,@Dish2 int= 2
+           ,@Guest3 nvarchar(128)
+           ,@Dish3 int
+           ,@Guest4 nvarchar(128)
+           ,@Dish4 int
+		   ,@email nvarchar(128)
+
+Execute [dbo].[RSVP_Insert]
+							
+					
+            @Attending
+		   ,@NumberofGuests
+           ,@Guest1
+           ,@Dish1
+           ,@Guest2
+           ,@Dish2
+           ,@Guest3
+           ,@Dish3
+           ,@Guest4
+           ,@Dish4
+		   ,@email 
+		   ,@Id OUTPUT
+		   
+Select * 
+from [dbo].[RSVP]
+Where Id = @Id
+
+
+
+*/
+
+as
+
+Begin
+
+INSERT INTO [dbo].[RSVP]
+           (		    
+            [Attending]
+		   ,[Number of Guests]
+           ,[Guest1]
+           ,[Dish1]
+           ,[Guest2]
+           ,[Dish2]
+           ,[Guest3]
+           ,[Dish3]
+           ,[Guest4]
+           ,[Dish4]
+		   ,[Email])
+     VALUES
+          (	    
+            @Attending
+		   ,@NumberofGuests
+           ,@Guest1
+           ,@Dish1
+           ,@Guest2
+           ,@Dish2
+           ,@Guest3
+           ,@Dish3
+           ,@Guest4
+           ,@Dish4
+		   ,@Email
+
+		   )
+
+
+
+set @Id = SCOPE_IDENTITY()
+
+end
