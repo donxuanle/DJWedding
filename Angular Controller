@@ -1,0 +1,128 @@
+  (function () {
+            "use strict";
+
+            angular.module("rsvp")
+            .factory('$rsvpService', rsvpServiceFactory);
+
+            rsvpServiceFactory.$inject = ['$baseService', '$sabio']
+
+            function rsvpServiceFactory($baseService, $sabio) {
+
+                var rsvpServiceObject = sabio.services.RSVP;
+
+                var newService = $baseService.merge(true, {}, rsvpServiceObject, $baseService);
+
+                return newService
+            }
+
+
+        })();
+
+
+
+
+
+        (function () {
+            "use strict";
+
+            angular.module("rsvp")
+            .controller('rsvpController', RSVPController);
+
+            RSVPController.$inject = ['$scope', '$baseController', '$rsvpService'];
+
+            function RSVPController(
+            $scope,
+            $baseController,
+            $rsvpService) {
+
+                var vm = this;
+                vm.items = null;
+                vm.rsvp = null;
+                vm.newRSVP = null;
+                vm.newRSVP = {};
+
+                vm.$rsvpService = $rsvpService;
+                vm.$scope = $scope;
+                vm.attending = [
+                    { name: "Attending", value: "" },
+                    { name: "Yes", value: true },
+                    { name: "No", value: false }
+                ];
+
+             
+
+                
+                vm.numberOfGuests = [
+                     { name: "Number of Invited Guests", value: "" },
+                    { name: "1", value: 1 },
+                    { name: "2", value: 2 },
+                    { name: "3", value: 3 },
+                    { name: "4", value: 4 },
+
+                ];
+
+                vm.dish = [
+                    { name: "Beef and Sea Bass", value: 1 },
+                    { name: "Vegetarian", value: 2 },
+                    { name: "Kids Meal", value: 3 }
+                ];
+
+
+
+
+                
+                vm.onPubError = _onPubError;              
+                vm.postRSVP = _postRSVP;
+                vm.onSuccess = _onSuccess;
+                
+                
+            
+
+                $baseController.merge(vm, $baseController);
+
+                vm.notify = vm.$rsvpService.getNotifier($scope);
+
+
+
+
+
+                function _postRSVP(newRSVP) {
+
+                    console.log("inside postrsvp");
+
+
+
+                    vm.$rsvpService.post(newRSVP, vm.onSuccess, vm.onPubError);
+
+                    
+                }
+
+
+              
+
+
+                function _onSuccess() {
+                    console.log("inside success")
+
+
+                    vm.$alertService.success("RSVP Posted!");
+
+                    vm.newRSVP.$setPristine();
+                }
+
+
+
+
+                function _onPubError(jqXhr, Error) {
+
+                    vm.$alertService.error("RSVP was not posted. Please provide all needed information")
+
+                    
+                }
+
+    
+
+            }
+
+
+        })();
