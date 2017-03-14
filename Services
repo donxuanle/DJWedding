@@ -1,0 +1,121 @@
+
+namespace Wedding.Services
+{
+    public class RSVPservice : BaseService, IRSVPservice
+
+    {
+        public int InsertRSVP(RSVPaddRequest model)
+        {
+
+            int uid = 0;
+            DataProvider.ExecuteNonQuery(GetConnection, "[dbo].[RSVP_Insert]"
+               , inputParamMapper: delegate (SqlParameterCollection paramCollection)
+               {
+                   paramCollection.AddWithValue("@Attending", model.Attending);
+                   paramCollection.AddWithValue("@NumberofGuests", model.NumberofGuests);
+                   paramCollection.AddWithValue("@Guest1", model.Guest1);
+                   paramCollection.AddWithValue("@Dish1", model.Dish1);
+                   paramCollection.AddWithValue("@Guest2", model.Guest2);
+                   paramCollection.AddWithValue("@Dish2", model.Dish2);
+                   paramCollection.AddWithValue("@Guest3", model.Guest3);
+                   paramCollection.AddWithValue("@Dish3", model.Dish3);
+                   paramCollection.AddWithValue("@Guest4", model.Guest4);
+                   paramCollection.AddWithValue("@Dish4", model.Dish4);
+                   paramCollection.AddWithValue("@Email", model.Email);
+
+                   SqlParameter p = new SqlParameter("@Id", System.Data.SqlDbType.Int);
+                   p.Direction = System.Data.ParameterDirection.Output;
+
+                   paramCollection.Add(p);
+
+               }, returnParameters: delegate (SqlParameterCollection param)
+               {
+                   int.TryParse(param["@Id"].Value.ToString(), out uid);
+               }
+               );
+
+            return uid;
+
+        }
+
+
+        public void UpdateRSVP(RSVPupdateRequest model, int Id)
+        {
+
+
+            DataProvider.ExecuteNonQuery(GetConnection, "RSVP_UpdateById"
+               , inputParamMapper: delegate (SqlParameterCollection paramCollection)
+               {
+                   
+                   paramCollection.AddWithValue("@Attending", model.Attending);
+                   paramCollection.AddWithValue("@NumberofGuests", model.NumberofGuests);
+                   paramCollection.AddWithValue("@Guest1", model.Guest1);
+                   paramCollection.AddWithValue("@Dish1", model.Dish1);
+                   paramCollection.AddWithValue("@Guest2", model.Guest2);
+                   paramCollection.AddWithValue("@Dish2", model.Dish2);
+                   paramCollection.AddWithValue("@Guest3", model.Guest3);
+                   paramCollection.AddWithValue("@Dish3", model.Dish3);
+                   paramCollection.AddWithValue("@Guest4", model.Guest4);
+                   paramCollection.AddWithValue("@Dish4", model.Dish4);
+                   paramCollection.AddWithValue("@Email", model.Email);
+                   paramCollection.AddWithValue("@Id", Id);
+
+               });
+        }
+
+        public List<RSVPdomain> GetAllPost()
+        {
+            List<RSVPdomain> list = null;
+
+            DataProvider.ExecuteCmd(GetConnection, "RSVP_SelectAll"
+               , inputParamMapper: null
+               , map: delegate (IDataReader reader, short set)
+               {
+                   RSVPdomain p = new RSVPdomain();
+                   int startingindex = 0; //startingOrdinal
+                   p.Id = reader.GetSafeInt32(startingindex++);
+                   p.Attending = reader.GetSafeBool(startingindex++);
+                   p.NumberofGuests = reader.GetSafeInt32(startingindex++);
+                   p.Guest1 = reader.GetSafeString(startingindex++);
+                   p.Dish1 = reader.GetSafeInt32(startingindex++);
+                   p.Guest2 = reader.GetSafeString(startingindex++);
+                   p.Dish2 = reader.GetSafeInt32(startingindex++);
+                   p.Guest3 = reader.GetSafeString(startingindex++);
+                   p.Dish3 = reader.GetSafeInt32(startingindex++);
+                   p.Guest4 = reader.GetSafeString(startingindex++);
+                   p.Dish4 = reader.GetSafeInt32(startingindex++);
+                   p.Email = reader.GetSafeString(startingindex++);
+
+
+                   if (list == null)
+                   {
+                       list = new List<RSVPdomain>();
+                   }
+
+                   list.Add(p);
+               }
+               );
+
+
+            return list;
+        }
+
+
+        public void DeleteById(int Id)
+        {
+
+                DataProvider.ExecuteNonQuery(GetConnection, "[dbo].[RSVPDeletebyId]"
+               , inputParamMapper: delegate (SqlParameterCollection paramCollection)
+               {
+
+                   paramCollection.AddWithValue("@Id", Id);
+                   
+
+
+               });
+            
+
+        }
+
+    }
+}
