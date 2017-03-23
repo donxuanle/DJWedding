@@ -10,4 +10,4 @@ Utlizes:
 <li>MS SQL > T-SQL stored procedures</li>
 <ul>
 
-Deployed on AWS Elastic Beanstalk implementing RDS provided database server and EC2 security restrictions.
+<p>Deployed on AWS Elastic Beanstalk implementing RDS provided database server and EC2 security restrictions.</p>
