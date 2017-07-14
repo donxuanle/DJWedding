@@ -1,0 +1,452 @@
+﻿
+
+<link href="~/Scripts/bower_components/bootstrap/dist/css/wedding.css" rel="stylesheet" />
+<link href="~/Scripts/bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+<link href="~/Scripts/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<h2 class= "text-center">RSVP</h2>
+<div class="container-fluid">
+    <table class="table table-striped tableTop" ng-controller="guestListController as main">
+        <thead>
+
+            <tr class="tableHeader">
+                <th>ID</th>
+                <th><select class="form-control"
+        data-placeholder-text-single="Dish 1"
+        ng-model="mc.guest.dish1"
+        ng-options="dish.value as dish.name for dish in main.attending"
+        required>
+
+  
+                    </select>
+</th>
+                <th nowrap>Number of Guests</th>
+                <th nowrap>Guests 1</th>
+                <th>Dish 1</th>
+                <th nowrap>Guest 2</th>
+                <th>Dish 2</th>
+                <th nowrap>Guest 3</th>
+                <th>Dish 3</th>
+                <th nowrap>Guest 4</th>
+                <th nowrap>Dish 4</th>
+                <th>Email</th>
+                <th>Song</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="guest in main.rsvp track by guest.id">
+                <td>{{guest.id}}</td>
+                <td>
+                    <span ng-show="(guest.attending)">Yes</span>
+                    <span ng-show="(!guest.attending)">No</span>
+                </td>
+                <td>{{guest.numberofGuests}}</td>
+                <td nowrap class="guestName">{{guest.guest1}}</td>
+                <td nowrap>
+                    <span ng-show="(guest.dish1 == 1)">Filet Tenderloin and Sea Bass</span>
+                    <span ng-show="(guest.dish1 == 2)">Vegetarian</span>
+                    <span ng-show="(guest.dish1 == 3)">Kids Meal</span>
+
+                </td>
+                <td nowrap class="guestName">{{guest.guest2}}</td>
+                <td nowrap>
+                    <span ng-show="(guest.dish2 == 1)">Filet Tenderloin and Sea Bass</span>
+                    <span ng-show="(guest.dish2 == 2)">Vegetarian</span>
+                    <span ng-show="(guest.dish2 == 3)">Kids Meal</span>
+                </td>
+                <td nowrap class="guestName">{{guest.guest3}}</td>
+                <td nowrap>
+                    <span ng-show="(guest.dish3 == 1)">Filet Tenderloin and Sea Bass</span>
+                    <span ng-show="(guest.dish3 == 2)">Vegetarian</span>
+                    <span ng-show="(guest.dish3 == 3)">Kids Meal</span>
+                </td>
+                <td nowrap class="guestName">{{guest.guest4}}</td>
+                <td nowrap>
+                    <span ng-show="(guest.dish4 == 1)">Filet Tenderloin and Sea Bass</span>
+                    <span ng-show="(guest.dish4 == 2)">Vegetarian</span>
+                    <span ng-show="(guest.dish4 == 3)">Kids Meal</span>
+                </td>
+                <td>{{guest.email}}</td>
+                <td>{{guest.song}}</td>
+                <td>
+                    <button type="button" class="btn btn-default btn-sm" ng-click="main.openModal(guest)">
+                        <span class="glyphicon glyphicon-pencil"></span> Edit
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm" ng-click="main.deleteRSVP(guest.id)">
+                        <span class="glyphicon glyphicon-trash"></span> Trash
+                    </button>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+</div>
+
+
+<script type="text/ng-template" id="modalContent.html">
+
+    <div class="modal-header">
+        <h3 class="modal-title">Edit: ID# {{mc.guest.id}}</h3>
+    </div>
+
+    <div class="modal-body">
+
+        <form>
+
+            <div class="form-group">
+                <label for="formGroupExampleInput">Attending</label>
+                <select class="form-control"
+                        chosen
+                        data-placeholder-text-single="Attending"
+                        ng-model="mc.guest.attending"
+                        ng-options="attending.value as attending.name for attending in mc.attending"
+                        required></select>
+            </div>
+
+            <div class="form-group">
+                <label for="formGroupExampleInput">Number of Guests</label>
+                <select class="form-control"
+                        chosen
+                        data-placeholder-text-single="Number of Guests"
+                        ng-model="mc.guest.numberofGuests"
+                        ng-options="numberOfGuests.value as numberOfGuests.name for numberOfGuests in mc.numberOfGuests"
+                        required></select>
+            </div>
+
+
+            <div class="form-group">
+                <label for="formGroupExampleInput">Guest 1</label>
+                <input type="text" class="form-control" id="formGroupExampleInput" ng-model="mc.guest.guest1">
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Dish 1</label>
+                <select class="form-control"
+                        data-placeholder-text-single="Dish 1"
+                        ng-model="mc.guest.dish1"
+                        ng-options="dish.value as dish.name for dish in mc.dish"
+                        required>
+
+                    <option value="">Entree</option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="formGroupExampleInput">Guest 2</label>
+                <input type="text" class="form-control" id="formGroupExampleInput" ng-model="mc.guest.guest2">
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Dish 2</label>
+                <select class="form-control"
+                        data-placeholder-text-single="Dish 2"
+                        ng-model="mc.guest.dish2"
+                        ng-options="dish.value as dish.name for dish in mc.dish"
+                        required>
+                    <option value="">Entree</option>
+
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="formGroupExampleInput">Guest 3</label>
+                <input type="text" class="form-control" id="formGroupExampleInput" ng-model="mc.guest.guest3">
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Dish 3</label>
+                <select class="form-control"
+                        data-placeholder-text-single="Dish 3"
+                        ng-model="mc.guest.dish3"
+                        ng-options="dish.value as dish.name for dish in mc.dish"
+                        required>
+                    <option value="">Entree</option>
+                </select>
+
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput">Guest 4</label>
+                <input type="text" class="form-control" id="formGroupExampleInput" ng-model="mc.guest.guest4">
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Dish 4</label>
+                <select class="form-control"
+                        data-placeholder-text-single="Dish 4"
+                        ng-model="mc.guest.dish4"
+                        ng-options="dish.value as dish.name for dish in mc.dish"
+                        required>
+                    <option value="">Entree</option>
+
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Email</label>
+                <input type="text" class="form-control" id="formGroupExampleInput2" ng-model="mc.guest.email">
+            </div>
+            <div class="form-group">
+                <label for="formGroupExampleInput2">Song Request</label>
+                <input type="text" class="form-control" id="formGroupExampleInput2" ng-model="mc.guest.song">
+            </div>
+        </form>
+
+
+    </div>
+
+
+
+
+
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-click="mc.update()">Update</button>
+        <button class="btn btn-warning" ng-click="mc.cancel()">Cancel</button>
+    </div>
+
+
+
+</script>
+
+
+
+
+<script src="~/Scripts/sabio.services.RSVP.js"></script>
+
+
+<script type="text/javascript">
+
+
+
+    (function () {
+        "use strict";
+
+        angular.module("rsvp")
+        .controller('guestListController', GuestListController);
+
+        GuestListController.$inject = ['$scope', '$baseController', '$rsvpService', '$uibModal'];
+
+        function GuestListController(
+        $scope,
+        $baseController,
+        $rsvpService,
+        $uibModal) {
+
+            var vm = this;
+            vm.items = null;
+            vm.rsvp = null;
+
+
+            vm.$rsvpService = $rsvpService;
+            vm.$scope = $scope;
+            vm.attending = [
+               { name: "Attenting",value:""},
+               { name: "Yes", value: 1 },
+               { name: "No", value: 2 }
+            ];
+
+            vm.$uibModal = $uibModal;
+
+            vm.receiveItems = _receiveItems;
+            vm.onPubError = _onPubError;
+            vm.deleteRSVP = _deleteRSVP;
+            vm.onSuccess = _onSuccess;
+            vm.openModal = _openModal;
+
+
+
+
+            $baseController.merge(vm, $baseController);
+
+            vm.notify = vm.$rsvpService.getNotifier($scope);
+
+
+            render();
+
+            function render() {
+
+
+                vm.$rsvpService.getAll(vm.receiveItems, vm.onPubError);
+
+            }
+
+
+            function _receiveItems(data) {
+
+                vm.notify(function () {
+                    vm.rsvp = data.items
+                });
+
+                console.log("data", vm.rsvp)
+
+
+            }
+
+
+            function _deleteRSVP(data) {
+
+                console.log("in delete");
+
+                if (confirm("Are you sure you want to delete?")) {
+
+                    vm.$rsvpService.apiDeleteById(data, vm.onSuccess, vm.onPubError);
+                }
+            }
+
+
+            function _onSuccess() {
+                console.log("inside success")
+
+                render();
+
+                vm.$alertService.success("RSVP Deleted!");
+
+
+            }
+
+
+            function _onPubError(jqXhr, Error) {
+
+                vm.$alertService.error("RSVP was not deleted!");
+
+
+            }
+
+            function _openModal(guest) {
+                var modalInstance = vm.$uibModal.open({
+                    animation: true,
+                    templateUrl: 'modalContent.html',       //  this tells it what html template to use. it must exist in a script tag OR external file
+                    controller: 'modalController as mc',    //  this controller must exist and be registered with angular for this to work
+                    size: 'sm',
+                    resolve: {  //  anything passed to resolve can be injected into the modal controller as shown below
+                        guest: function () {
+                            return guest;
+                        }
+                    }
+                });
+
+                //  when the modal closes it returns a promise
+                modalInstance.result.then(function (selectedItem) {
+                    vm.modalSelected = selectedItem;    //  if the user closed the modal by clicking Save
+                }, function () {
+                    console.log('Modal dismissed at: ' + new Date());   //  if the user closed the modal by clicking cancel
+                });
+            }
+
+        }
+    })();
+
+
+
+
+
+
+
+
+    (function () {
+        "use strict";
+
+        angular.module("rsvp")
+            .controller('modalController', ModalController);
+
+        //  $uibModalInstance is coming from the UI Bootstrap library and is a reference to the modal window itself so we can work with it
+        //  items is the array passed in from the main controller above through the resolve property
+        ModalController.$inject = ['$scope', '$baseController', '$uibModalInstance', 'guest', '$rsvpService']
+
+        function ModalController(
+            $scope
+            , $baseController
+            , $uibModalInstance
+            , guest
+            , $rsvpService) {
+
+            var vm = this;
+
+            $baseController.merge(vm, $baseController);
+
+            vm.$scope = $scope;
+            vm.$rsvpService = $rsvpService;
+            vm.$uibModalInstance = $uibModalInstance;
+
+            vm.guest = guest;
+            vm.guest.attending = guest.attending;
+            vm.attending = [
+                { name: "Attending", value: "" },
+                { name: "Yes", value: true },
+                { name: "No", value: false }
+            ];
+
+            vm.numberOfGuests = [
+                { name: "Number of Invited Guests", value: "" },
+                { name: "1", value: 1 },
+                { name: "2", value: 2 },
+                { name: "3", value: 3 },
+                { name: "4", value: 4 },
+
+            ];
+
+            vm.dish = [
+
+                { name: "Filet Tenderloin and Sea Bass", value: 1 },
+                { name: "Vegetarian", value: 2 },
+                { name: "Kids Meal", value: 3 }
+
+            ];
+
+
+            vm.onSuccess = _onSuccess;
+            vm._onPubError = _onPubError;
+
+
+
+            //  $uibModalInstance is used to communicate and send data back to main controller
+            vm.update = function () {
+                if (confirm("Do you want to update?")) {
+                    vm.$rsvpService.updateById(vm.guest.id, vm.guest, vm.onSuccess, vm._onPubError)
+                };
+
+
+                vm.$uibModalInstance.dismiss('cancel')
+            };
+
+            vm.cancel = function () {
+                vm.$uibModalInstance.dismiss('cancel');
+            };
+
+
+
+            function _onSuccess() {
+                console.log("inside success")
+
+
+
+                vm.$alertService.success("RSVP Updated!");
+
+
+            }
+
+
+            function _onPubError(jqXhr, Error) {
+
+                vm.$alertService.error("RSVP was not Updated!");
+
+
+            }
+        }
+    })();
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
